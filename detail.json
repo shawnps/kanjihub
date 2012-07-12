@@ -1,0 +1,13 @@
+GET /kanji/子
+
+{
+  "character": "子",
+  "onYomi": ["シ", "ス", "ツ"],
+  "kunYomi": ["こ", "ね", "-こ"],
+  "nanYomi": ["い", "き", "ぎ", "く", "け", "ねっ"],
+  "strokes": 3,
+  "jlpt": 5,
+  "grade": 1,
+  "frequency": "72",
+  "meaning": ["child", "sign of the rat", "11PM-1AM", "first sign of Chinese zodiac"]
+}
