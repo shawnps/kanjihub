@@ -1,4 +1,4 @@
-GET /kanji/子
+// GET /kanji/子
 
 {
   "character": "子",
