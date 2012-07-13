@@ -1,0 +1,21 @@
+<div class="navbar-inner">
+  <div class="container">
+
+    <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+    </a>
+
+    <a class="brand" href="/">KanjiHub</a>
+
+    <div class="nav-collapse">
+      <ul class="nav main-nav">
+      {{#each navItems}}
+        <li {{#ifequal ../active route}}class="active"{{/ifequal}}><a href="{{route}}">{{display}}</a></li>
+      {{/each}}
+      </ul>
+    </div>
+
+  </div>
+</div>
