@@ -23,3 +23,6 @@ _testmain.go
 
 # installed npm packages
 node_modules/
+
+# front-end generated files
+frontend/public/dist/
