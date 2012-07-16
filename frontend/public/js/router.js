@@ -9,12 +9,13 @@ define([
   'views/nav',
   'views/home',
   'views/about',
-  'views/kanji'
+  'views/kanji',
+  'models/kanji'
 ],
 /**
  * @returns {Backbone.Router}
  */
-function(Backbone, NavView, HomeView, AboutView, KanjiView) {
+function(Backbone, NavView, HomeView, AboutView, KanjiView, KanjiModel) {
   'use strict';
 
   var AppRouter;
@@ -25,11 +26,10 @@ function(Backbone, NavView, HomeView, AboutView, KanjiView) {
   AppRouter = Backbone.Router.extend({
 
     routes: {
-      '': 'home',
-      'about': 'about',
-      'kanji/:character': 'kanji',
-      // Default
-      '*actions': 'defaultAction'
+      '':                   'homeRoute',
+      'about':              'aboutRoute',
+      'kanji/:character':   'kanjiRoute',
+      '*actions':           'defaultRoute'
     },
 
     /**
@@ -37,36 +37,117 @@ function(Backbone, NavView, HomeView, AboutView, KanjiView) {
      * @param {Object} options
      */
     initialize: function (options) {
+      this.currentView = null;
+      this.container = $('#main-container');
       this.navView = new NavView({ router: this });
-      this.homeView = new HomeView({ router: this });
-      this.aboutView = new AboutView();
-      this.kanjiView = new KanjiView();
+      this.homeView = new HomeView({ router: this, renderOnce: true });
+      this.aboutView = new AboutView({ renderOnce: true });
     },
 
-    home: function () {
-      this.homeView.render();
+    /**
+     * @private
+     * Shows a view. Disposes it if needed. Keeps track of current view.
+     * @param {Backbone.View}
+     */
+    showView: function (view) {
+      var el;
+      // Only dispose views that can be rendered multiple times,
+      // otherwise just detatch the dom with events in tact.
+      if (this.currentView) {
+        if (this.currentView.options.renderOnce) {
+          this.currentView.$el.detach();
+        } else {
+          this.disposeView(this.currentView);
+        }
+      }
+      // If it's a "renderOnce" view just reappend the element,
+      // otherwise rerender the view.
+      if (view.options.renderOnce) {
+        if (view.options.hasRendered) {
+          el = view.el;
+        } else {
+          view.options.hasRendered = true;
+        }
+      }
+      this.container.append(el || view.render().el);
+      this.currentView = view;
     },
 
-    about: function () {
-      this.aboutView.render();
+    /**
+     * @private
+     * Dispose of a view by removing all its handlers, deleting its
+     * model/collection, and removing all model/collection handlers it has.
+     * @param {Backbone.View}
+     */
+    disposeView: function (view) {
+      if (!view) {
+        return;
+      }
+      // Remove all backbone listeners to the view.
+      view.off();
+      // Remove from dom and remove all dom events.
+      view.remove();
+      // Remove any model listeners for the view's context.
+      if (view.model) {
+        view.model.off(null, null, view);
+        delete view.model;
+      }
+      // Remove any collection listeners for the view's context.
+      if (view.collection) {
+        view.model.off(null, null, view);
+        delete view.collection;
+      }
     },
 
-    kanji: function (character) {
-      this.kanjiView.render(character);
+    /**
+     * @private
+     * Route for the Home page.
+     */
+    homeRoute: function () {
+      this.showView(this.homeView);
     },
 
-    defaultAction: function (actions) {
+    /**
+     * @private
+     * Route for the About page.
+     */
+    aboutRoute: function () {
+      this.showView(this.aboutView);
+    },
+
+    /**
+     * @private
+     * Route for the Kanji detail page.
+     */
+    kanjiRoute: function (character) {
+      this.showView(
+        new KanjiView({model: new KanjiModel({ id: 1 })})
+      );
+    },
+
+    /**
+     * @private
+     * Route that defaults to the Home page if if no matching route was found.
+     */
+    defaultRoute: function (actions) {
       // No route.
       this.navigate('home', { trigger: true, replace: true });
     }
 
   });
 
+
   return {
+
+    /**
+     * @public
+     * Initializes the router.
+     */
     initialize: function () {
       var appRouter = new AppRouter();
       Backbone.history.start({ pushState: true });
     }
+
   };
 
 });

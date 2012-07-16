@@ -1,11 +1,73 @@
-<div class="kanji-page">
-  Kanji details here.
+<div class="row-fluid">
 
-  <div class="row-fluid">
-    <div class="span3">
-      <div class="big-character">{{character}}</div>
+  <div class="span2">
+    <div class="big-character">{{kanji.character}}</div>
+  </div>
+
+  <div class="span8">
+
+    <div class="row-fluid">
+      <div class="span2"><strong>Stroke Count:</strong> {{kanji.strokes}}</div>
+      <div class="span2"><strong>Frequency:</strong> {{kanji.frequency}}</div>
+      <div class="span2"><strong>JLPT Level:</strong> {{kanji.jlpt}}</div>
+      <div class="span2"><strong>Grade:</strong> {{kanji.grade}}</div>
     </div>
-    <div class="span8">details</div>
+
+    <div class="row-fluid">
+
+      <div class="span6">
+        <table class="table table-condensed">
+          <thead>
+            <tr>
+              <td><strong>Meaning (English)</strong></td>
+            </tr>
+          </thead>
+          <tbody>
+            {{#each kanji.meaning}}
+            <tr>
+              <td>{{this}}</td>
+            </tr>
+            {{/each}}
+          </tbody>
+        </table>
+      </div>
+
+      <div class="span3">
+        <table class="table table-condensed">
+          <thead>
+            <tr>
+              <td><strong>Kun Reading</strong></td>
+            </tr>
+          </thead>
+          <tbody>
+            {{#each kanji.kunYomi}}
+            <tr>
+              <td>{{this}}</td>
+            </tr>
+            {{/each}}
+          </tbody>
+        </table>
+      </div>
+
+      <div class="span3">
+        <table class="table table-condensed">
+          <thead>
+            <tr>
+              <td><strong>On Reading</strong></td>
+            </tr>
+          </thead>
+          <tbody>
+            {{#each kanji.onYomi}}
+            <tr>
+              <td>{{this}}</td>
+            </tr>
+            {{/each}}
+          </tbody>
+        </table>
+      </div>
+
+    </div>
+
   </div>
 
 </div>

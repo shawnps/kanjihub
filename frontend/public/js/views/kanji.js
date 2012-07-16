@@ -23,6 +23,10 @@ function($, _, Backbone, Handlebars, tpl) {
    */
   KanjiView = Backbone.View.extend({
 
+    tagName: 'div',
+    id: 'kanji-detail-page',
+    className: 'container-fluid',
+
     /**
      * @private
      */
@@ -34,19 +38,19 @@ function($, _, Backbone, Handlebars, tpl) {
     events: {
     },
 
-    el: $('#main-container'),
-
     initialize: function () {
-      _.bindAll(this, 'render');
+      _.bindAll(this, 'render', 'remove');
+      this.model.on('change', this.render);
+      this.model.fetch();
     },
 
     /**
      * @public
      * @returns {Backbone.View}
      */
-    render: function (character) {
+    render: function () {
       this.$el.html(this.template({
-        character: character
+        kanji: this.model.toJSON()
       }));
 
       return this;

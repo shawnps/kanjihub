@@ -16,12 +16,16 @@ define([
 function($, _, Backbone, Handlebars, aboutTpl) {
   'use strict';
 
-  var NavView;
+  var AboutView;
 
   /**
    * @constructor
    */
-  NavView = Backbone.View.extend({
+  AboutView = Backbone.View.extend({
+
+    tagName: 'div',
+    id: 'about-page',
+    className: 'container-fluid',
 
     /**
      * @private
@@ -33,8 +37,6 @@ function($, _, Backbone, Handlebars, aboutTpl) {
      */
     events: {
     },
-
-    el: $('#main-container'),
 
     initialize: function () {
       _.bindAll(this, 'render');
@@ -53,6 +55,6 @@ function($, _, Backbone, Handlebars, aboutTpl) {
 
   });
 
-  return NavView;
+  return AboutView;
 
 });

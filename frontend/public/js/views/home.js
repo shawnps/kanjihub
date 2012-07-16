@@ -23,6 +23,10 @@ function($, _, Backbone, Handlebars, tpl) {
    */
   HomeView = Backbone.View.extend({
 
+    tagName: 'div',
+    id: 'home-page',
+    className: 'container-fluid',
+
     /**
      * @private
      */
@@ -34,8 +38,6 @@ function($, _, Backbone, Handlebars, tpl) {
     events: {
       'click .kanji': 'onKanjiClick'
     },
-
-    el: $('#main-container'),
 
     initialize: function () {
       // Bind all non-event handler methods to 'this'.
