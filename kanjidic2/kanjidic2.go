@@ -18,7 +18,7 @@ type Meaning struct {
 
 type DicRef struct {
 	DrType string `xml:"dr_type,attr"json:"dr_type"`
-	Value  int    `xml:",chardata"json:"dic_ref"`
+	Value  string `xml:",chardata"json:"dic_ref"`
 }
 
 type CpValue struct {
