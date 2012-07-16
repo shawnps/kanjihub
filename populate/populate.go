@@ -47,7 +47,7 @@ func populate(w http.ResponseWriter, r *http.Request) {
 				k.Meanings = append(k.Meanings, m.Value)
 			}
 		}
-		_, err := datastore.Put(c, datastore.NewIncompleteKey(c, "Kanji", nil), &k)
+		_, err := datastore.Put(c, datastore.NewKey(c, "Kanji", kanji.Literal, 0, nil), &k)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
