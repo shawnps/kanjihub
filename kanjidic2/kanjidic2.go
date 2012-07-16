@@ -7,54 +7,54 @@ import (
 )
 
 type Reading struct {
-	RType string `xml:"r_type,attr"`
-	Value string `xml:",innerxml"`
+	RType string `xml:"r_type,attr"json:"r_type"`
+	Value string `xml:",innerxml"json:"reading"`
 }
 
 type Meaning struct {
-	MLang string `xml:"m_lang,attr"`
-	Value string `xml:",innerxml"`
+	MLang string `xml:"m_lang,attr"json:"m_lang,omitempty"`
+	Value string `xml:",innerxml"json:"meaning"`
 }
 
 type DicRef struct {
-	DrType string `xml:"dr_type,attr"`
-	Value  string `xml:",innerxml"`
+	DrType string `xml:"dr_type,attr"json:"dr_type"`
+	Value  int    `xml:",chardata"json:"dic_ref"`
 }
 
 type CpValue struct {
-	CpType string `xml:"cp_type,attr"`
-	Value  string `xml:",innerxml"`
+	CpType string `xml:"cp_type,attr"json:"cp_type"`
+	Value  string `xml:",innerxml"json:"cp_value"`
 }
 
 type RadValue struct {
-	RadType string `xml:"rad_type,attr"`
-	Value   int    `xml:",innerxml"`
+	RadType string `xml:"rad_type,attr"json:"rad_type"`
+	Value   int    `xml:",chardata"json:"rad_value"`
 }
 
 type Variant struct {
-	VarType string `xml:"var_type,attr"`
-	Value   string `xml:",innerxml"`
+	VarType string `xml:"var_type,attr"json:"var_type"`
+	Value   string `xml:",innerxml"json:"variant"`
 }
 
 type QCode struct {
-	QcType string `xml:"qc_type,attr"`
-	Value  string `xml:",innerxml"`
+	QcType string `xml:"qc_type,attr"json:"qc_type"`
+	Value  string `xml:",innerxml"json:"q_code"`
 }
 
 type Kanji struct {
-	Literal     string     `xml:"literal"`
-	CodePoints  []CpValue  `xml:"codepoint>cp_value"`
-	Radicals    []RadValue `xml:"radical>rad_value"`
-	Grade       int        `xml:"misc>grade"`
-	StrokeCount int        `xml:"misc>stroke_count"`
-	Variant     Variant    `xml:"misc>variant"`
-	Freq        int        `xml:"misc>freq"`
-	JLPT        int        `xml:"misc>jlpt"`
-	DicRefs     []DicRef   `xml:"dic_number>dic_ref"`
-	QueryCodes  []QCode    `xml:"query_code>q_code"`
-	Readings    []Reading  `xml:"reading_meaning>rmgroup>reading"`
-	Meanings    []Meaning  `xml:"reading_meaning>rmgroup>meaning"`
-	Nanori      []string   `xml:"nanori"`
+	Literal     string     `xml:"literal"json:"literal"`
+	CodePoints  []CpValue  `xml:"codepoint>cp_value"json:"codepoints"`
+	Radicals    []RadValue `xml:"radical>rad_value"json:"radicals"`
+	Grade       int        `xml:"misc>grade"json:"grade,omitempty"`
+	StrokeCount int        `xml:"misc>stroke_count"json:"stroke_count"`
+	Variant     *Variant   `xml:"misc>variant"json:"variant,omitempty"`
+	Freq        int        `xml:"misc>freq"json:"freq,omitempty"`
+	JLPT        int        `xml:"misc>jlpt"json:"jlpt,omitempty"`
+	DicRefs     []DicRef   `xml:"dic_number>dic_ref"json:"dic_numbers,omitempty"`
+	QueryCodes  []QCode    `xml:"query_code>q_code"json:"query_codes,omitempty"`
+	Readings    []Reading  `xml:"reading_meaning>rmgroup>reading"json:"readings,omitempty"`
+	Meanings    []Meaning  `xml:"reading_meaning>rmgroup>meaning"json:"meanings,omitempty"`
+	Nanori      []string   `xml:"nanori"json:"nanori,omitempty"`
 }
 
 func ParseKanjiDic2(filename string) (kanjiList []Kanji) {
