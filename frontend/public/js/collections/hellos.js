@@ -1,20 +1,20 @@
 /**
  * @fileOVerview
- * A sample Backbone Collection.
+ * Collection of Kanji character models.
  */
 
 define([
   'underscore',
   'backbone',
-  'models/hello'
+  'models/kanji'
 ],
 /**
  * @returns {Backbone.Collection}
  */
-function(_, Backbone, Hello){
+function(_, Backbone, KanjiModel){
   'use strict';
 
-  var Hellos;
+  var Kanji;
 
   /**
    * @private
@@ -26,9 +26,9 @@ function(_, Backbone, Hello){
   /**
    * @constructor
    */
-  Hellos = Backbone.Collection.extend({
+  Kanji = Backbone.Collection.extend({
 
-    model: Hello,
+    model: KanjiModel,
 
     /**
      * @public
@@ -40,5 +40,5 @@ function(_, Backbone, Hello){
 
   });
 
-  return Hellos;
+  return Kanji;
 });

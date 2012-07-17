@@ -1,6 +1,6 @@
 /**
  * @fileOverview
- * View that manages and renders the Home page.
+ * View that manages and renders the Search page.
  */
 
 define([
@@ -8,7 +8,7 @@ define([
   'underscore',
   'backbone',
   'handlebars',
-  'text!templates/home.handlebars'
+  'text!templates/search.handlebars'
 ],
 /**
  * @returns {Backbone.View}
@@ -16,15 +16,15 @@ define([
 function($, _, Backbone, Handlebars, tpl) {
   'use strict';
 
-  var HomeView;
+  var SearchView;
 
   /**
    * @constructor
    */
-  HomeView = Backbone.View.extend({
+  SearchView = Backbone.View.extend({
 
     tagName: 'div',
-    id: 'home-page',
+    id: 'search-page',
     className: 'container-fluid',
 
     /**
@@ -73,5 +73,5 @@ function($, _, Backbone, Handlebars, tpl) {
 
   });
 
-  return HomeView;
+  return SearchView;
 });
