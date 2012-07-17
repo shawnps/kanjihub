@@ -1,6 +1,7 @@
 package kanjihub
 
 import (
+	"io/ioutil"
 	"appengine"
 	"appengine/datastore"
 	"code.google.com/p/gorilla/mux"
@@ -23,12 +24,18 @@ type Kanji struct {
 func init() {
 	r := mux.NewRouter()
 	r.HandleFunc("/", HomeHandler)
-	r.HandleFunc("/kanji/{literal}", KanjiDetailHandler)
+	r.HandleFunc("/api/kanji/{literal}", KanjiDetailHandler)
 	http.Handle("/", r)
 }
 
 func HomeHandler(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprint(w, "Hello, world!")
+        b, err := ioutil.ReadFile("frontend/public/index.html")
+        if err != nil {
+            http.Error(w, err.Error(), http.StatusNotFound)
+            return
+        }
+	fmt.Fprint(w, string(b))
+        return
 }
 
 func KanjiDetailHandler(w http.ResponseWriter, r *http.Request) {

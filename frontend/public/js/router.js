@@ -121,7 +121,7 @@ function(Backbone, NavView, HomeView, AboutView, KanjiView, KanjiModel) {
      */
     kanjiRoute: function (character) {
       this.showView(
-        new KanjiView({model: new KanjiModel({ id: 1 })})
+        new KanjiView({model: new KanjiModel({ id: character })})
       );
     },
 

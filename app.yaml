@@ -4,9 +4,20 @@ runtime: go
 api_version: go1
 
 handlers:
+- url: /public
+  static_dir: frontend/public
+
+- url: /public/(.*)
+  static_dir: frontend/public/\1
+
+- url: /api/.*
+  script: _go_app
+
+- url: /
+  script: _go_app
+
 - url: /.*
   script: _go_app
 
 - url: /populate
   script: _go_app
-  login: admin

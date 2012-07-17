@@ -22,17 +22,17 @@ function(_, Backbone) {
   Kanji = Backbone.Model.extend({
 
     defaults: {
-      character: '',
+      literal: '',
       onYomi: [],
       kunYomi: [],
       strokes: 0,
       jlpt: 0,
       grade: 0,
-      frequency: 0,
-      meaning: []
+      freq: 0,
+      meanings: []
     },
 
-    urlRoot: '/api-mock/kanji',
+    urlRoot: '/api/kanji',
 
     /**
      * @public
