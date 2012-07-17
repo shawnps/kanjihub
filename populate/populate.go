@@ -26,6 +26,7 @@ func populate(w http.ResponseWriter, r *http.Request) {
 	c := appengine.NewContext(r)
 	kanjidic := kanjidic2.ParseKanjiDic2("kanjidic2/kanjidic2.xml")
 	for _, kanji := range kanjidic {
+		c.Infof(kanji.Literal)
 		k := Kanji{
 			Literal:     kanji.Literal,
 			Grade:       kanji.Grade,
