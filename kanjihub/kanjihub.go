@@ -25,6 +25,7 @@ func init() {
 	r := mux.NewRouter()
 	r.HandleFunc("/", HomeHandler)
 	r.HandleFunc("/api/kanji/{literal}", KanjiDetailHandler)
+	r.HandleFunc("/{path:.*}", HomeHandler)
 	http.Handle("/", r)
 }
 
