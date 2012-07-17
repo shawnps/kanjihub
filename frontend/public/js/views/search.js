@@ -25,7 +25,6 @@ function($, _, Backbone, Handlebars, tpl) {
 
     tagName: 'div',
     id: 'search-page',
-    className: 'container-fluid',
 
     /**
      * @private

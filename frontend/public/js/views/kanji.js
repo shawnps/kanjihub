@@ -25,7 +25,6 @@ function($, _, Backbone, Handlebars, tpl) {
 
     tagName: 'div',
     id: 'kanji-detail-page',
-    className: 'container-fluid',
 
     /**
      * @private
