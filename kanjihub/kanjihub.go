@@ -1,12 +1,12 @@
 package kanjihub
 
 import (
-	"io/ioutil"
 	"appengine"
 	"appengine/datastore"
 	"code.google.com/p/gorilla/mux"
 	"encoding/json"
 	"fmt"
+	"io/ioutil"
 	"net/http"
 )
 
@@ -30,13 +30,13 @@ func init() {
 }
 
 func HomeHandler(w http.ResponseWriter, r *http.Request) {
-        b, err := ioutil.ReadFile("frontend/public/index.html")
-        if err != nil {
-            http.Error(w, err.Error(), http.StatusNotFound)
-            return
-        }
+	b, err := ioutil.ReadFile("frontend/public/index.html")
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusNotFound)
+		return
+	}
 	fmt.Fprint(w, string(b))
-        return
+	return
 }
 
 func KanjiDetailHandler(w http.ResponseWriter, r *http.Request) {
