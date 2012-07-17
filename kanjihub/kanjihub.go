@@ -13,11 +13,11 @@ import (
 type Kanji struct {
 	Literal     string   `json:"literal"`
 	Grade       int      `json:"grade"`
-	StrokeCount int      `json:"stroke_count"`
+	StrokeCount int      `json:"strokes"`
 	Freq        int      `json:"freq"`
 	JLPT        int      `json:"jlpt"`
-	Onyomi      []string `json:"onyomi"`
-	Kunyomi     []string `json:"kunyomi"`
+	Onyomi      []string `json:"onYomi"`
+	Kunyomi     []string `json:"kunYomi"`
 	Meanings    []string `json:"meanings"`
 }
 
