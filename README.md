@@ -8,6 +8,5 @@ a hub for kanji
 * Restyle things so it doesn't look like a generic Bootstrap project.
 * Pull in testrunner and template fixes from Pith once available.
 * Update client libraries.
-* Memcache
 * Gorilla Sub route for API
 * API search endpoint
