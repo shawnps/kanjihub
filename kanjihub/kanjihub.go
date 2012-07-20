@@ -31,7 +31,7 @@ func init() {
 }
 
 func HomeHandler(w http.ResponseWriter, r *http.Request) {
-	b, err := ioutil.ReadFile("frontend/public/index.html")
+	b, err := ioutil.ReadFile("index.html")
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusNotFound)
 		return
