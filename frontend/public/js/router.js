@@ -6,6 +6,7 @@
 
 define([
   'backbone',
+  'jquery',
   'views/nav',
   'views/search',
   'views/about',
@@ -15,7 +16,7 @@ define([
 /**
  * @returns {Backbone.Router}
  */
-function(Backbone, NavView, SearchView, AboutView, KanjiView, KanjiModel) {
+function(Backbone, $, NavView, SearchView, AboutView, KanjiView, KanjiModel) {
   'use strict';
 
   var AppRouter;
