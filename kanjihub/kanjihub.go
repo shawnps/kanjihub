@@ -83,6 +83,4 @@ func KanjiDetailHandler(w http.ResponseWriter, r *http.Request) {
 		}
 		fmt.Fprint(w, string(b))
 	}
-    w.Header().Set("Content-Type", "application/json")
-	fmt.Fprint(w, string(b))
 }
