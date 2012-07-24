@@ -62,7 +62,7 @@ module.exports = function(grunt) {
         tasks: 'less'
       },
       lint: {
-        files: ['<config:lint.client>', '<config:lint.server>'],
+        files: ['<config:lint.frontend>'],
         tasks: 'lint'
       }
     },
@@ -87,7 +87,8 @@ module.exports = function(grunt) {
       },
       globals: {
         define: true,
-        require: true
+        require: true,
+        module: true
       },
       tests: {
         options: {},

@@ -6,8 +6,9 @@
 
 define([
   'backbone',
+  'jquery',
   'views/nav',
-  'views/home',
+  'views/search',
   'views/about',
   'views/kanji',
   'models/kanji'
@@ -15,7 +16,7 @@ define([
 /**
  * @returns {Backbone.Router}
  */
-function(Backbone, NavView, HomeView, AboutView, KanjiView, KanjiModel) {
+function(Backbone, $, NavView, SearchView, AboutView, KanjiView, KanjiModel) {
   'use strict';
 
   var AppRouter;
@@ -26,9 +27,10 @@ function(Backbone, NavView, HomeView, AboutView, KanjiView, KanjiModel) {
   AppRouter = Backbone.Router.extend({
 
     routes: {
-      '':                   'homeRoute',
-      'about':              'aboutRoute',
-      'kanji/:character':   'kanjiRoute',
+      '':                   'search',
+      'search':             'search',
+      'about':              'about',
+      'kanji/:character':   'kanji',
       '*actions':           'defaultRoute'
     },
 
@@ -40,7 +42,7 @@ function(Backbone, NavView, HomeView, AboutView, KanjiView, KanjiModel) {
       this.currentView = null;
       this.container = $('#main-container');
       this.navView = new NavView({ router: this });
-      this.homeView = new HomeView({ router: this, renderOnce: true });
+      this.searchView = new SearchView({ router: this, renderOnce: true });
       this.aboutView = new AboutView({ renderOnce: true });
     },
 
@@ -99,19 +101,21 @@ function(Backbone, NavView, HomeView, AboutView, KanjiView, KanjiModel) {
       }
     },
 
+    // ROUTES
+
     /**
      * @private
-     * Route for the Home page.
+     * Route for the Search/Home page.
      */
-    homeRoute: function () {
-      this.showView(this.homeView);
+    search: function () {
+      this.showView(this.searchView);
     },
 
     /**
      * @private
      * Route for the About page.
      */
-    aboutRoute: function () {
+    about: function () {
       this.showView(this.aboutView);
     },
 
@@ -119,7 +123,7 @@ function(Backbone, NavView, HomeView, AboutView, KanjiView, KanjiModel) {
      * @private
      * Route for the Kanji detail page.
      */
-    kanjiRoute: function (character) {
+    kanji: function (character) {
       this.showView(
         new KanjiView({model: new KanjiModel({ id: character })})
       );
@@ -131,7 +135,7 @@ function(Backbone, NavView, HomeView, AboutView, KanjiView, KanjiModel) {
      */
     defaultRoute: function (actions) {
       // No route.
-      this.navigate('home', { trigger: true, replace: true });
+      this.navigate('', { trigger: true, replace: true });
     }
 
   });

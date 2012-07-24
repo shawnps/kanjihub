@@ -43,7 +43,7 @@ function($, _, Backbone, Handlebars, navTpl) {
      * @private
      */
     navItems: [
-      { route: '', display: 'Home' },
+      { route: 'search', display: 'Search' },
       { route: 'about', display: 'About' }
     ],
 
@@ -63,7 +63,7 @@ function($, _, Backbone, Handlebars, navTpl) {
      */
     render: function (activeLink) {
       this.$el.html(this.template({
-        active: activeLink,
+        activeLink: activeLink,
         navItems: this.navItems
       }));
 

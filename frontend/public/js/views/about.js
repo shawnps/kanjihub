@@ -25,7 +25,6 @@ function($, _, Backbone, Handlebars, aboutTpl) {
 
     tagName: 'div',
     id: 'about-page',
-    className: 'container-fluid',
 
     /**
      * @private
