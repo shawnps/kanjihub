@@ -3,6 +3,7 @@ package main
 import (
 	"appengine"
 	"appengine/datastore"
+	"appengine/delay"
 	"kanjidic2"
 	"net/http"
 )
@@ -24,6 +25,10 @@ type Kanji struct {
 
 func populate(w http.ResponseWriter, r *http.Request) {
 	c := appengine.NewContext(r)
+	populateLater.Call(c)
+}
+
+var populateLater = delay.Func("populate", func(c appengine.Context) {
 	kanjidic := kanjidic2.ParseKanjiDic2("kanjidic2/kanjidic2.xml")
 	for _, kanji := range kanjidic {
 		c.Infof(kanji.Literal)
@@ -50,8 +55,8 @@ func populate(w http.ResponseWriter, r *http.Request) {
 		}
 		_, err := datastore.Put(c, datastore.NewKey(c, "Kanji", kanji.Literal, 0, nil), &k)
 		if err != nil {
-			http.Error(w, err.Error(), http.StatusInternalServerError)
+			c.Errorf(err.Error())
 			return
 		}
 	}
-}
+})
