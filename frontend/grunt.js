@@ -61,6 +61,10 @@ module.exports = function(grunt) {
         files: ['<config:recess.dev.src>'],
         tasks: 'less'
       },
+      templates: {
+        files: ['<config:handlebars.src>'],
+        tasks: 'templates'
+      },
       lint: {
         files: ['<config:lint.frontend>'],
         tasks: 'lint'
@@ -112,8 +116,8 @@ module.exports = function(grunt) {
   grunt.registerTask('templates', 'handlebars');
 
   // Does a basic build.
-  grunt.registerTask('default', 'lint recess:dev');
+  grunt.registerTask('default', 'lint templates recess:dev');
   // Does a full production-ready build and compresses and minifies everything.
-  grunt.registerTask('prod', 'lint recess:prod templates compile');
+  grunt.registerTask('prod', 'lint templates compile recess:prod');
   grunt.registerTask('test', 'server mochaphantom');
 };

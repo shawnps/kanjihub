@@ -7,13 +7,12 @@ define([
   'jquery',
   'underscore',
   'backbone',
-  'handlebars',
-  'text!templates/kanji.handlebars'
+  'templates/kanji'
 ],
 /**
  * @returns {Backbone.View}
  */
-function($, _, Backbone, Handlebars, tpl) {
+function($, _, Backbone, tpl) {
   'use strict';
 
   var KanjiView;
@@ -29,7 +28,7 @@ function($, _, Backbone, Handlebars, tpl) {
     /**
      * @private
      */
-    template: Handlebars.compile(tpl),
+    template: tpl,
 
     /**
      * @private

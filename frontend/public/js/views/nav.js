@@ -7,15 +7,14 @@ define([
   'jquery',
   'underscore',
   'backbone',
-  'handlebars',
-  'text!templates/nav.handlebars',
+  'templates/nav',
   // Needed for small-screen responsive design collapsing menu.
   'bootstrapCollapse'
 ],
 /**
  * @returns {Backbone.View}
  */
-function($, _, Backbone, Handlebars, navTpl) {
+function($, _, Backbone, navTpl) {
   'use strict';
 
   var NavView;
@@ -28,7 +27,7 @@ function($, _, Backbone, Handlebars, navTpl) {
     /**
      * @private
      */
-    template: Handlebars.compile(navTpl),
+    template: navTpl,
 
     /**
      * @private

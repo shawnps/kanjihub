@@ -8,12 +8,12 @@ define([
   'underscore',
   'backbone',
   'handlebars',
-  'text!templates/search.handlebars'
+  'templates/search'
 ],
 /**
  * @returns {Backbone.View}
  */
-function($, _, Backbone, Handlebars, tpl) {
+function($, _, Backbone, tpl) {
   'use strict';
 
   var SearchView;
@@ -29,7 +29,7 @@ function($, _, Backbone, Handlebars, tpl) {
     /**
      * @private
      */
-    template: Handlebars.compile(tpl),
+    template: tpl,
 
     /**
      * @private
