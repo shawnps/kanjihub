@@ -7,7 +7,7 @@
 
 require.config({
   paths: {
-    'templates':            '../templates',
+    'templates':            '../dist/templates',
     'text':                 '../extern/require/text',
     'jquery':               '../extern/jquery/jquery-1.7.2.min',
     'backbone':             '../extern/backbone/backbone',

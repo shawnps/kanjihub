@@ -26,7 +26,7 @@ module.exports = function(grunt) {
         }
       },
       prod: {
-        src: ['public/less/*.less'],
+        src: ['public/less/**/*.less'],
         dest: 'public/dist/style.css',
         options: {
           compile: true,

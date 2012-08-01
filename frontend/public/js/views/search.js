@@ -7,7 +7,6 @@ define([
   'jquery',
   'underscore',
   'backbone',
-  'handlebars',
   'templates/search'
 ],
 /**
