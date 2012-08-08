@@ -3,6 +3,14 @@ kanjihub
 
 a hub for kanji
 
+## Dev Environment Setup
+* Install Google App Engine for Go
+* Install node js
+* `npm install -g grunt`
+* `npm install -g handlebars`
+
+## Front-end build commands
+* From `/frontend` run `grunt prod`
 
 ## TODO
 * Restyle things so it doesn't look like a generic Bootstrap project.

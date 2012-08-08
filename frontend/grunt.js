@@ -1,6 +1,8 @@
 module.exports = function(grunt) {
   'use strict';
 
+  var prodStaticRoot = '../kanjihub/static/';
+
   // Load up npm task plugins
   grunt.loadNpmTasks('grunt-recess');
   grunt.loadNpmTasks('grunt-requirejs');
@@ -20,25 +22,31 @@ module.exports = function(grunt) {
     recess: {
       dev: {
         src: ['public/less/**/*.less'],
-        dest: 'public/dist/style.css',
+        dest: prodStaticRoot + 'css/style.css',
         options: {
           compile: true
         }
       },
       prod: {
         src: ['public/less/**/*.less'],
-        dest: 'public/dist/style.css',
+        dest: prodStaticRoot + 'css/style.css',
         options: {
           compile: true,
           compress: true
         }
       }
     },
+    concat: {
+      prod: {
+        src: ['public/extern/require/require.min.js'],
+        dest: prodStaticRoot + 'js/require.min.js'
+      }
+    },
     requirejs: {
       baseUrl: 'public/js',
       name: 'main',
       mainConfigFile: 'public/js/main.js',
-      out: 'public/dist/main.built.js',
+      out: prodStaticRoot + 'js/main.min.js',
       preserveLicenseComments: false
     },
     handlebars: {
@@ -114,10 +122,11 @@ module.exports = function(grunt) {
   grunt.registerTask('less', 'recess:dev');
   grunt.registerTask('compile', 'requirejs');
   grunt.registerTask('templates', 'handlebars');
+  grunt.registerTask('copyrequire', 'concat:prod');
 
   // Does a basic build.
   grunt.registerTask('default', 'lint templates recess:dev');
   // Does a full production-ready build and compresses and minifies everything.
-  grunt.registerTask('prod', 'lint templates compile recess:prod');
+  grunt.registerTask('prod', 'lint templates copyrequire compile recess:prod');
   grunt.registerTask('test', 'server mochaphantom');
 };
