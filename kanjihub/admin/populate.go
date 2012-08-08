@@ -1,10 +1,10 @@
-package main
+package admin
 
 import (
 	"appengine"
 	"appengine/datastore"
 	"appengine/delay"
-	"kanjidic2"
+	"admin/kanjidic2"
 	"net/http"
 )
 
@@ -29,7 +29,7 @@ func populate(w http.ResponseWriter, r *http.Request) {
 }
 
 var populateLater = delay.Func("populate", func(c appengine.Context) {
-	kanjidic := kanjidic2.ParseKanjiDic2("kanjidic2/kanjidic2.xml")
+	kanjidic := kanjidic2.ParseKanjiDic2("kanjidic2.xml")
 	for _, kanji := range kanjidic {
 		c.Infof(kanji.Literal)
 		k := Kanji{

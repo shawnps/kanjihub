@@ -4,11 +4,11 @@ runtime: go
 api_version: go1
 
 handlers:
-- url: /public
-  static_dir: frontend/public
+- url: /static
+  static_dir: static
 
-- url: /public/(.*)
-  static_dir: frontend/public/\1
+- url: /static/(.*)
+  static_dir: static/\1
 
 - url: /api/.*
   script: _go_app
