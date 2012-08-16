@@ -7,12 +7,14 @@ define([
   'jquery',
   'underscore',
   'backbone',
-  'templates/search'
+  'templates/search',
+  'views/search_bar',
+  'views/search_results'
 ],
 /**
  * @returns {Backbone.View}
  */
-function($, _, Backbone, tpl) {
+function($, _, Backbone, tpl, SearchBarView, SearchResultsView) {
   'use strict';
 
   var SearchView;
@@ -34,13 +36,14 @@ function($, _, Backbone, tpl) {
      * @private
      */
     events: {
-      'click .kanji': 'onKanjiClick'
     },
 
     initialize: function () {
       // Bind all non-event handler methods to 'this'.
-      _.bindAll(this, 'render');
+      _.bindAll(this, 'render', 'renderMain', 'renderSubView');
       this.router = this.options.router;
+      this.searchBarView = new SearchBarView();
+      this.searchResultsView = new SearchResultsView();
     },
 
     /**
@@ -48,26 +51,32 @@ function($, _, Backbone, tpl) {
      * @returns {Backbone.View}
      */
     render: function () {
-      this.$el.html(this.template({
-        title: 'Kanji Search'
-      }));
+      this.renderMain();
 
+      this.renderSubView(this.searchBarView);
+      this.renderSubView(this.searchResultsView);
       return this;
     },
 
+    /**
+     * Renders the main content of the search page not including sub views.
+     */
+    renderMain: function () {
+      this.$el.html(this.template({
+        title: 'Kanji Search'
+      }));
+    },
+
+    /**
+     * Renders subviews within the main view.
+     */
+    renderSubView: function (subView) {
+      var selector = '.' + subView.className;
+      this.$(selector, this.$el).replaceWith(subView.render().$el);
+    }
 
     // EVENT HANDLERS
 
-    /**
-     * @private
-     * @param {Event} e
-     */
-    onKanjiClick: function (e) {
-      this.router.navigate(
-        '/kanji/' + e.target.innerText,
-        { trigger: true });
-      e.preventDefault();
-    }
 
   });
 

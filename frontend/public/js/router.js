@@ -73,6 +73,9 @@ function(Backbone, $, NavView, SearchView, AboutView, KanjiView, KanjiModel) {
       }
       this.container.append(el || view.render().el);
       this.currentView = view;
+
+      // Add a single global variable for debugging.
+      window.kanjihub = this.currentView;
     },
 
     /**
