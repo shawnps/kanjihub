@@ -13,6 +13,7 @@ require.config({
     'backbone':             '../extern/backbone/backbone',
     'underscoreBase':       '../extern/underscore/underscore',
     'underscore':           'lib/underscore',
+    'handlebarsBase':       '../extern/handlebars/handlebars',
     'handlebars':           'lib/handlebars',
     // Bootstrap plugins
     'bootstrapAlert':       '../extern/bootstrap/js/bootstrap-alert',

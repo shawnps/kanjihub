@@ -29,6 +29,8 @@ function($, _, Backbone, navTpl) {
      */
     template: navTpl,
 
+    appTitle: '漢字Hub',
+
     /**
      * @private
      */
@@ -63,7 +65,8 @@ function($, _, Backbone, navTpl) {
     render: function (activeLink) {
       this.$el.html(this.template({
         activeLink: activeLink,
-        navItems: this.navItems
+        navItems: this.navItems,
+        appTitle: this.appTitle
       }));
 
       return this;

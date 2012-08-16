@@ -7,12 +7,12 @@
       <span class="icon-bar"></span>
     </a>
 
-    <a class="brand" href="/">MyApp</a>
+    <a class="brand" href="/">{{appTitle}}</a>
 
     <div class="nav-collapse">
       <ul class="nav main-nav">
       {{#each navItems}}
-        <li {{#ifequal ../active route}}class="active"{{/ifequal}}><a href="/{{route}}">{{display}}</a></li>
+        <li {{#ifequal ../activeLink route}}class="active"{{/ifequal}}><a href="/{{route}}">{{display}}</a></li>
       {{/each}}
       </ul>
     </div>
