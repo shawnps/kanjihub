@@ -8,13 +8,15 @@ define([
   'underscore',
   'backbone',
   'templates/search',
+  'collections/kanji',
   'views/search_bar',
   'views/search_results'
 ],
 /**
  * @returns {Backbone.View}
  */
-function($, _, Backbone, tpl, SearchBarView, SearchResultsView) {
+function($, _, Backbone, tpl, KanjiCollection, SearchBarView,
+  SearchResultsView) {
   'use strict';
 
   var SearchView;
@@ -42,8 +44,15 @@ function($, _, Backbone, tpl, SearchBarView, SearchResultsView) {
       // Bind all non-event handler methods to 'this'.
       _.bindAll(this, 'render', 'renderMain', 'renderSubView');
       this.router = this.options.router;
+      this.kanjiResults = new KanjiCollection([
+        { literal: '観' },
+        { literal: '感' },
+        { literal: '管' }
+      ]);
       this.searchBarView = new SearchBarView();
-      this.searchResultsView = new SearchResultsView();
+      this.searchResultsView = new SearchResultsView({
+        router: this.router,
+        collection: this.kanjiResults });
     },
 
     /**
@@ -52,7 +61,6 @@ function($, _, Backbone, tpl, SearchBarView, SearchResultsView) {
      */
     render: function () {
       this.renderMain();
-
       this.renderSubView(this.searchBarView);
       this.renderSubView(this.searchResultsView);
       return this;
