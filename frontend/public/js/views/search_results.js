@@ -41,6 +41,7 @@ function($, _, Backbone, tpl) {
       // Bind all non-event handler methods to 'this'.
       _.bindAll(this, 'render');
       this.router = this.options.router;
+      this.collection.on('reset', this.render);
     },
 
     /**

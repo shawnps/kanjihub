@@ -28,14 +28,18 @@ function(_, Backbone, KanjiModel){
    */
   Kanji = Backbone.Collection.extend({
 
+    baseUrl: '/api/search/',
+    url: '',
     model: KanjiModel,
+    searchTerm: '',
 
     /**
      * @public
      */
-    helperFunction: function () {
-      // do public stuff
-      return true;
+    setSearchTerm: function (searchTerm) {
+      this.searchTerm = searchTerm;
+      // TODO: logic for onyomi/kunyomi etc
+      this.url = this.baseUrl + 'onyomi/' + searchTerm;
     }
 
   });

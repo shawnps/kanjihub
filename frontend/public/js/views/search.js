@@ -42,14 +42,11 @@ function($, _, Backbone, tpl, KanjiCollection, SearchBarView,
 
     initialize: function () {
       // Bind all non-event handler methods to 'this'.
-      _.bindAll(this, 'render', 'renderMain', 'renderSubView');
+      _.bindAll(this, 'render', 'renderMain', 'renderSubView', 'onSearch');
       this.router = this.options.router;
-      this.kanjiResults = new KanjiCollection([
-        { literal: '観' },
-        { literal: '感' },
-        { literal: '管' }
-      ]);
+      this.kanjiResults = new KanjiCollection();
       this.searchBarView = new SearchBarView();
+      this.searchBarView.on('search', this.onSearch);
       this.searchResultsView = new SearchResultsView({
         router: this.router,
         collection: this.kanjiResults });
@@ -81,9 +78,13 @@ function($, _, Backbone, tpl, KanjiCollection, SearchBarView,
     renderSubView: function (subView) {
       var selector = '.' + subView.className;
       this.$(selector, this.$el).replaceWith(subView.render().$el);
-    }
+    },
 
     // EVENT HANDLERS
+    onSearch: function (searchTerm) {
+      this.kanjiResults.setSearchTerm(searchTerm);
+      this.kanjiResults.fetch();
+    }
 
 
   });

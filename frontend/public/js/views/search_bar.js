@@ -34,11 +34,12 @@ function($, _, Backbone, tpl) {
      * @private
      */
     events: {
+      'submit .kanji-search-form': 'onSearchSubmit'
     },
 
     initialize: function () {
       // Bind all non-event handler methods to 'this'.
-      _.bindAll(this, 'render');
+      _.bindAll(this, 'render', 'onSearchSubmit');
       this.router = this.options.router;
     },
 
@@ -52,10 +53,18 @@ function($, _, Backbone, tpl) {
       }));
 
       return this;
-    }
+    },
 
     // EVENT HANDLERS
 
+    /**
+     * Relays the click event with the input value.
+     */
+    onSearchSubmit: function (e) {
+      var searchTerm = this.$('.kanji-search-input').val();
+      this.trigger('search', searchTerm);
+      e.preventDefault();
+    }
 
   });
 
