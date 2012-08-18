@@ -4,11 +4,13 @@ import (
 	"appengine"
 	"appengine/datastore"
 	"appengine/memcache"
+	"bytes"
 	"code.google.com/p/gorilla/mux"
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
 	"net/http"
+	"strings"
 )
 
 type Kanji struct {
@@ -26,6 +28,7 @@ func init() {
 	r := mux.NewRouter()
 	r.HandleFunc("/", HomeHandler)
 	r.HandleFunc("/api/kanji/{literal}", KanjiDetailHandler)
+	r.HandleFunc("/api/search/{reading}/{term}", KanjiSearchHandler)
 	r.HandleFunc("/{path:.*}", HomeHandler)
 	http.Handle("/", r)
 }
@@ -40,9 +43,55 @@ func HomeHandler(w http.ResponseWriter, r *http.Request) {
 	return
 }
 
+func KanjiSearchHandler(w http.ResponseWriter, r *http.Request) {
+	c := appengine.NewContext(r)
+	// parse query params out of url
+	vars := mux.Vars(r)
+	// TODO: change query based on reading
+	reading := vars["reading"]
+	searchTerm := vars["term"]
+	readingFilter := "Kunyomi ="
+	if reading == strings.ToLower("onyomi") {
+		readingFilter = "Onyomi ="
+	}
+
+	// build the query
+	q := datastore.NewQuery("Kanji").
+		Filter(readingFilter, searchTerm).
+		Order("StrokeCount").
+		Limit(100)
+
+	// execute query and capture results
+	results := make([]Kanji, 0)
+	b := bytes.NewBuffer(nil)
+	for t := q.Run(c); ; {
+		var x Kanji
+		key, err := t.Next(&x)
+		if err == datastore.Done {
+			break
+		}
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusNotFound)
+			return
+		}
+		results = append(results, x)
+		fmt.Fprintf(b, "Key=%v\nKanji=%#v\n\n", x, key)
+	}
+
+	// marshall kanji into json
+	jsonResults, err := json.Marshal(results)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusNotFound)
+		return
+	}
+
+	// output results
+	w.Header().Set("Content-Type", "application/json; charset=utf-8")
+	fmt.Fprint(w, string(jsonResults))
+}
+
 func KanjiDetailHandler(w http.ResponseWriter, r *http.Request) {
 	c := appengine.NewContext(r)
-	w.Header().Set("Content-Type", "application/json")
 	vars := mux.Vars(r)
 	l := vars["literal"]
 	k := datastore.NewKey(c, "Kanji", l, 0, nil)
@@ -81,6 +130,7 @@ func KanjiDetailHandler(w http.ResponseWriter, r *http.Request) {
 			http.Error(w, err.Error(), http.StatusNotFound)
 			return
 		}
+		w.Header().Set("Content-Type", "application/json; charset=utf-8")
 		fmt.Fprint(w, string(b))
 	}
 }
