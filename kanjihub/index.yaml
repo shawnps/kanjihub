@@ -1,0 +1,7 @@
+indexes:
+
+- kind: Kanji
+  ancestor: no
+  properties:
+  - name: Onyomi
+  - name: StrokeCount
