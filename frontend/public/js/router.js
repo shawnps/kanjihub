@@ -7,16 +7,19 @@
 define([
   'backbone',
   'jquery',
+  'underscore',
   'views/nav',
   'views/search',
   'views/about',
   'views/kanji',
+  'models/query',
   'models/kanji'
 ],
 /**
  * @returns {Backbone.Router}
  */
-function(Backbone, $, NavView, SearchView, AboutView, KanjiView, KanjiModel) {
+function(Backbone, $, _, NavView, SearchView, AboutView, KanjiView, QueryModel,
+  KanjiModel) {
   'use strict';
 
   var AppRouter;
@@ -31,6 +34,7 @@ function(Backbone, $, NavView, SearchView, AboutView, KanjiView, KanjiModel) {
       'search':             'search',
       'about':              'about',
       'kanji/:character':   'kanji',
+      'search/:term':       'search',
       '*actions':           'defaultRoute'
     },
 
@@ -39,11 +43,17 @@ function(Backbone, $, NavView, SearchView, AboutView, KanjiView, KanjiModel) {
      * @param {Object} options
      */
     initialize: function (options) {
+      _.bindAll(this, 'updateSearchPath');
       this.currentView = null;
       this.container = $('#main-container');
       this.navView = new NavView({ router: this });
-      this.searchView = new SearchView({ router: this, renderOnce: true });
       this.aboutView = new AboutView({ renderOnce: true });
+      this.query = new QueryModel();
+      this.query.on('change', this.updateSearchPath);
+      this.searchView = new SearchView({
+        router: this,
+        model: this.query,
+        renderOnce: true });
     },
 
     /**
@@ -106,11 +116,31 @@ function(Backbone, $, NavView, SearchView, AboutView, KanjiView, KanjiModel) {
 
     // ROUTES
 
+    updateSearchPath: function () {
+      var searchTerm = this.query.get('searchTerm');
+      // only need to update the path if search term exists.
+      if (!searchTerm) {
+        return;
+      }
+      this.navigate(
+        'search/' +
+        searchTerm,
+        { trigger: false });
+    },
+
     /**
      * @private
      * Route for the Search/Home page.
      */
-    search: function () {
+    search: function (term) {
+      var query = this.searchView.model;
+      if (term) {
+        query.setSearchTerm(decodeURIComponent(term));
+      } else {
+        if (!query.isEmpty()) {
+          query.clear();
+        }
+      }
       this.showView(this.searchView);
     },
 
@@ -144,7 +174,6 @@ function(Backbone, $, NavView, SearchView, AboutView, KanjiView, KanjiModel) {
     }
 
   });
-
 
   return {
 

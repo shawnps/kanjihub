@@ -46,12 +46,11 @@ function($, _, Backbone, tpl, KanjiCollection, SearchBarView,
         'render',
         'renderMain',
         'renderSearchBar',
-        'renderResults',
-        'onSearchSubmit');
+        'renderResults');
       this.router = this.options.router;
+      this.searchBarView = new SearchBarView({ model: this.model });
       this.kanjiResults = new KanjiCollection();
-      this.searchBarView = new SearchBarView();
-      this.searchBarView.on('searchSubmit', this.onSearchSubmit);
+      this.kanjiResults.setQuery(this.model);
       this.resultsView = new SearchResultsView({
         router: this.router,
         collection: this.kanjiResults });
@@ -93,17 +92,9 @@ function($, _, Backbone, tpl, KanjiCollection, SearchBarView,
     renderResults: function () {
       this.resultsView.setElement(this.resultsContainerEl);
       this.resultsView.render();
-    },
-
-    search: function (searchTerm) {
-      this.kanjiResults.setSearchTerm(searchTerm);
-      this.kanjiResults.fetch();
-    },
+    }
 
     // EVENT HANDLERS
-    onSearchSubmit: function (searchTerm) {
-      this.search(searchTerm);
-    }
 
   });
 
