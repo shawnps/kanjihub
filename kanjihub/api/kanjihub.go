@@ -4,7 +4,6 @@ import (
 	"appengine"
 	"appengine/datastore"
 	"appengine/memcache"
-	"bytes"
 	"code.google.com/p/gorilla/mux"
 	"encoding/json"
 	"fmt"
@@ -63,20 +62,10 @@ func KanjiSearchHandler(w http.ResponseWriter, r *http.Request) {
 
 	// execute query and capture results
 	results := make([]Kanji, 0)
-	b := bytes.NewBuffer(nil)
-	for t := q.Run(c); ; {
-		var x Kanji
-		key, err := t.Next(&x)
-		if err == datastore.Done {
-			break
-		}
-		if err != nil {
-			http.Error(w, err.Error(), http.StatusNotFound)
-			return
-		}
-		results = append(results, x)
-		fmt.Fprintf(b, "Key=%v\nKanji=%#v\n\n", x, key)
-	}
+	if _, err := q.GetAll(c, &results); err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+    }
 
 	// marshall kanji into json
 	jsonResults, err := json.Marshal(results)
