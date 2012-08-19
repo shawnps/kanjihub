@@ -46,7 +46,7 @@ function($, _, Backbone, tpl) {
      */
     render: function () {
       this.$el.html(this.template({
-        //query: 'fake query'
+        query: 'カン'
       }));
 
       return this;
