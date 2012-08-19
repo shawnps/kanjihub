@@ -4,5 +4,10 @@ indexes:
   ancestor: no
   properties:
   - name: Onyomi
+  - name: StrokeCount
+
+- kind: Kanji
+  ancestor: no
+  properties:
   - name: Kunyomi
   - name: StrokeCount
