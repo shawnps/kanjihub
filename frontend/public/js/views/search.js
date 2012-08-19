@@ -41,13 +41,18 @@ function($, _, Backbone, tpl, KanjiCollection, SearchBarView,
     },
 
     initialize: function () {
-      // Bind all non-event handler methods to 'this'.
-      _.bindAll(this, 'render', 'renderMain', 'renderSubView', 'onSearch');
+      // Bind all methods to 'this'.
+      _.bindAll(this,
+        'render',
+        'renderMain',
+        'renderSearchBar',
+        'renderResults',
+        'onSearchSubmit');
       this.router = this.options.router;
       this.kanjiResults = new KanjiCollection();
       this.searchBarView = new SearchBarView();
-      this.searchBarView.on('search', this.onSearch);
-      this.searchResultsView = new SearchResultsView({
+      this.searchBarView.on('searchSubmit', this.onSearchSubmit);
+      this.resultsView = new SearchResultsView({
         router: this.router,
         collection: this.kanjiResults });
     },
@@ -58,8 +63,10 @@ function($, _, Backbone, tpl, KanjiCollection, SearchBarView,
      */
     render: function () {
       this.renderMain();
-      this.renderSubView(this.searchBarView);
-      this.renderSubView(this.searchResultsView);
+      this.resultsContainerEl = this.$('.search-results-container');
+      this.searchBarContainerEl = this.$('.search-bar-container');
+      this.renderSearchBar();
+      this.renderResults();
       return this;
     },
 
@@ -73,19 +80,30 @@ function($, _, Backbone, tpl, KanjiCollection, SearchBarView,
     },
 
     /**
-     * Renders subviews within the main view.
+     * Renders the search bar view to the container element.
      */
-    renderSubView: function (subView) {
-      var selector = '.' + subView.className;
-      this.$(selector, this.$el).replaceWith(subView.render().$el);
+    renderSearchBar: function () {
+      this.searchBarView.setElement(this.searchBarContainerEl);
+      this.searchBarView.render();
+    },
+
+    /**
+     * Renders the search results view to the container element.
+     */
+    renderResults: function () {
+      this.resultsView.setElement(this.resultsContainerEl);
+      this.resultsView.render();
+    },
+
+    search: function (searchTerm) {
+      this.kanjiResults.setSearchTerm(searchTerm);
+      this.kanjiResults.fetch();
     },
 
     // EVENT HANDLERS
-    onSearch: function (searchTerm) {
-      this.kanjiResults.setSearchTerm(searchTerm);
-      this.kanjiResults.fetch();
+    onSearchSubmit: function (searchTerm) {
+      this.search(searchTerm);
     }
-
 
   });
 

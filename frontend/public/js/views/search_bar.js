@@ -22,9 +22,6 @@ function($, _, Backbone, tpl) {
    */
   SearchBarView = Backbone.View.extend({
 
-    tagName: 'div',
-    className: 'search-bar',
-
     /**
      * @private
      */
@@ -34,12 +31,12 @@ function($, _, Backbone, tpl) {
      * @private
      */
     events: {
-      'submit .kanji-search-form': 'onSearchSubmit'
+      'submit .kanji-search-form': 'onSubmit'
     },
 
     initialize: function () {
       // Bind all non-event handler methods to 'this'.
-      _.bindAll(this, 'render', 'onSearchSubmit');
+      _.bindAll(this, 'render', 'onSubmit');
       this.router = this.options.router;
     },
 
@@ -60,9 +57,9 @@ function($, _, Backbone, tpl) {
     /**
      * Relays the click event with the input value.
      */
-    onSearchSubmit: function (e) {
+    onSubmit: function (e) {
       var searchTerm = this.$('.kanji-search-input').val();
-      this.trigger('search', searchTerm);
+      this.trigger('searchSubmit', searchTerm);
       e.preventDefault();
     }
 

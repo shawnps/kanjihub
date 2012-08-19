@@ -22,9 +22,6 @@ function($, _, Backbone, tpl) {
    */
   SearchResultsView = Backbone.View.extend({
 
-    tagName: 'div',
-    className: 'search-results',
-
     /**
      * @private
      */
