@@ -9,7 +9,7 @@ require.config({
   paths: {
     'templates':            '../dist/templates',
     'text':                 '../extern/require/text',
-    'jquery':               '../extern/jquery/jquery-1.7.2.min',
+    'jquery':               '../extern/jquery/jquery-1.8.0',
     'backbone':             '../extern/backbone/backbone',
     'underscoreBase':       '../extern/underscore/underscore',
     'underscore':           'lib/underscore',
