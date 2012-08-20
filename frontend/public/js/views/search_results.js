@@ -46,10 +46,14 @@ function($, _, Backbone, tpl) {
      * @returns {Backbone.View}
      */
     render: function () {
+      var message = '';
+      if (!this.collection.length) {
+        message = 'No results found.';
+      }
       this.$el.html(this.template({
-        results: this.collection.toJSON()
+        results: this.collection.toJSON(),
+        message: message
       }));
-
       return this;
     },
 
