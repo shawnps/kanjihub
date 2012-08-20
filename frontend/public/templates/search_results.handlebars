@@ -1,14 +1,18 @@
 <div class="search-results">
 
   {{#if message}}
-    <div class="alert message">{{message}}</div>
-  {{/if}}
 
-  {{#each_with_prev_value results "strokes"}}
-    {{#if prevDifferent}}
-      <div class="stroke-counter">{{strokes}}</div>
-    {{/if}}
-    <a class="kanji">{{literal}}</a>
-  {{/each_with_prev_value}}
+    <div class="alert message">{{message}}</div>
+
+  {{else}}
+
+    {{#each_with_prev_value results "strokes"}}
+      {{#if prevDifferent}}
+        <div class="stroke-counter">{{strokes}}</div>
+      {{/if}}
+      <a class="kanji">{{literal}}</a>
+    {{/each_with_prev_value}}
+
+  {{/if}}
 
 </div>

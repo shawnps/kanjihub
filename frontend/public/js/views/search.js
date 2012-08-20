@@ -46,14 +46,18 @@ function($, _, Backbone, tpl, KanjiCollection, SearchBarView,
         'render',
         'renderMain',
         'renderSearchBar',
-        'renderResults');
+        'renderResults',
+        'onQueryChange');
       this.router = this.options.router;
       this.searchBarView = new SearchBarView({ model: this.model });
       this.kanjiResults = new KanjiCollection();
-      this.kanjiResults.setQuery(this.model);
       this.resultsView = new SearchResultsView({
         router: this.router,
         collection: this.kanjiResults });
+      this.model.on('change', this.onQueryChange);
+      this.kanjiResults.on('reset', function () {
+        this.renderResults();
+      }.bind(this));
     },
 
     /**
@@ -65,7 +69,6 @@ function($, _, Backbone, tpl, KanjiCollection, SearchBarView,
       this.resultsContainerEl = this.$('.search-results-container');
       this.searchBarContainerEl = this.$('.search-bar-container');
       this.renderSearchBar();
-      this.renderResults();
       return this;
     },
 
@@ -89,12 +92,20 @@ function($, _, Backbone, tpl, KanjiCollection, SearchBarView,
     /**
      * Renders the search results view to the container element.
      */
-    renderResults: function () {
+    renderResults: function (msg) {
+      // turn loading off
       this.resultsView.setElement(this.resultsContainerEl);
-      this.resultsView.render();
-    }
+      this.resultsView.render(msg);
+    },
 
     // EVENT HANDLERS
+
+    onQueryChange: function () {
+      this.kanjiResults.reset(null, {silent: true});
+      this.renderResults('Loading...');
+      this.kanjiResults.updateUrl(this.model);
+      this.kanjiResults.fetch();
+    }
 
   });
 

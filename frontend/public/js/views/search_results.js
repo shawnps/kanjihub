@@ -38,16 +38,15 @@ function($, _, Backbone, tpl) {
       // Bind all non-event handler methods to 'this'.
       _.bindAll(this, 'render');
       this.router = this.options.router;
-      this.collection.on('reset', this.render);
     },
 
     /**
      * @public
      * @returns {Backbone.View}
      */
-    render: function () {
-      var message = '';
-      if (!this.collection.length) {
+    render: function (msg) {
+      var message = msg || '';
+      if (!msg && !this.collection.length) {
         message = 'No results found.';
       }
       this.$el.html(this.template({
