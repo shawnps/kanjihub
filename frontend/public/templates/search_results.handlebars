@@ -1,7 +1,10 @@
 <div class="search-results">
 
-  {{#each results}}
-  <a class="kanji">{{literal}}</a>
-  {{/each}}
+  {{#each_with_prev_value results "strokes"}}
+    {{#if prevDifferent}}
+      <div class="stroke-counter">{{strokes}}</div>
+    {{/if}}
+    <a class="kanji">{{literal}}</a>
+  {{/each_with_prev_value}}
 
 </div>

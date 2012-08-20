@@ -13,18 +13,29 @@
   }
 }
 
-.kanji {
-  font-size: 200%;
-  background-color: @grayLighter;
-  color: @black;
-  height: 40px;
-  width: 40px;
+.kanji, .stroke-counter {
   display: inline-block;
+  width: 40px;
+  height: 40px;
   text-align: center;
   vertical-align: middle;
+  margin: 4px;
+}
+
+.stroke-counter {
+  background-color: @grayLight;
+  color: @grayLighter;
+  font-size: 1.5em;
+  line-height: 2em;
+  border-radius: 20px;
+}
+
+.kanji {
+  background-color: @grayLighter;
+  color: @black;
+  font-size: 2em;
   line-height: 1.5em;
   border-radius: 4px;
-  margin: 4px;
 }
 .kanji:hover {
   color: @gray;
