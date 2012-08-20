@@ -33,7 +33,7 @@
       </div>
 
       <div class="span3">
-        <table class="table table-condensed">
+        <table class="table table-condensed reading">
           <thead>
             <tr>
               <td><strong>Kun Reading</strong></td>
@@ -42,7 +42,7 @@
           <tbody>
             {{#each kanji.kunYomi}}
             <tr>
-              <td>{{this}}</td>
+              <td><a href="/search/{{this}}">{{this}}</a></td>
             </tr>
             {{/each}}
           </tbody>
@@ -50,7 +50,7 @@
       </div>
 
       <div class="span3">
-        <table class="table table-condensed">
+        <table class="table table-condensed reading">
           <thead>
             <tr>
               <td><strong>On Reading</strong></td>
@@ -59,7 +59,7 @@
           <tbody>
             {{#each kanji.onYomi}}
             <tr>
-              <td>{{this}}</td>
+              <td><a href="/search/{{this}}">{{this}}</a></td>
             </tr>
             {{/each}}
           </tbody>

@@ -34,10 +34,12 @@ function($, _, Backbone, tpl) {
      * @private
      */
     events: {
+      'click table.reading > tbody': 'onReadingClick'
     },
 
     initialize: function () {
       _.bindAll(this, 'render', 'remove');
+      this.router = this.options.router;
       this.model.on('change', this.render);
       this.model.fetch();
     },
@@ -52,6 +54,17 @@ function($, _, Backbone, tpl) {
       }));
 
       return this;
+    },
+
+    // EVENT HANDLERS
+
+    onReadingClick: function (e) {
+      var searchTerm = this.$(e.target).text();
+      this.router.navigate(
+        'search/' +
+        searchTerm,
+        {trigger: true});
+      e.preventDefault();
     }
 
   });
