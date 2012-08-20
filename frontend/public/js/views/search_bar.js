@@ -51,6 +51,7 @@ function($, _, Backbone, QueryModel, tpl) {
         query: this.model.toJSON()
       }));
 
+      this.$('.search-query').focus();
       return this;
     },
 
@@ -59,7 +60,7 @@ function($, _, Backbone, QueryModel, tpl) {
      */
     updateQuery: function () {
       var query = this.model,
-          searchTerm = this.$('.kanji-search-input').val();
+          searchTerm = this.$('.search-query').val();
       query.setSearchTerm(searchTerm);
     },
 
