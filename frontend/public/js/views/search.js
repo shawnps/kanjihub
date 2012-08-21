@@ -55,9 +55,9 @@ function($, _, Backbone, tpl, KanjiCollection, SearchBarView,
         router: this.router,
         collection: this.kanjiResults });
       this.model.on('change', this.onQueryChange);
-      this.kanjiResults.on('reset', function () {
+      this.kanjiResults.on('reset', _.bind(function () {
         this.renderResults();
-      }.bind(this));
+      }, this));
     },
 
     /**
