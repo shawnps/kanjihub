@@ -1,10 +1,10 @@
 package admin
 
 import (
+	"admin/kanjidic2"
 	"appengine"
 	"appengine/datastore"
 	"appengine/delay"
-	"admin/kanjidic2"
 	"net/http"
 )
 
@@ -29,9 +29,8 @@ func populate(w http.ResponseWriter, r *http.Request) {
 }
 
 var populateLater = delay.Func("populate", func(c appengine.Context) {
-	kanjidic := kanjidic2.ParseKanjiDic2("kanjidic2.xml")
+	kanjidic := kanjidic2.ParseKanjiDic2("admin/kanjidic2/kanjidic2.xml")
 	for _, kanji := range kanjidic {
-		c.Infof(kanji.Literal)
 		k := Kanji{
 			Literal:     kanji.Literal,
 			Grade:       kanji.Grade,
@@ -53,7 +52,9 @@ var populateLater = delay.Func("populate", func(c appengine.Context) {
 				k.Meanings = append(k.Meanings, m.Value)
 			}
 		}
-		_, err := datastore.Put(c, datastore.NewKey(c, "Kanji", kanji.Literal, 0, nil), &k)
+		key := datastore.NewKey(c, "Kanji", kanji.Literal, 0, nil)
+		_, err := datastore.Put(c, key, &k)
+		c.Infof("Added kanji %s", kanji.Literal)
 		if err != nil {
 			c.Errorf(err.Error())
 			return
