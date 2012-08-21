@@ -65,7 +65,7 @@ func KanjiSearchHandler(w http.ResponseWriter, r *http.Request) {
 	if _, err := q.GetAll(c, &results); err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
-    }
+	}
 
 	// marshall kanji into json
 	jsonResults, err := json.Marshal(results)

@@ -25,10 +25,6 @@ type Kanji struct {
 
 func populate(w http.ResponseWriter, r *http.Request) {
 	c := appengine.NewContext(r)
-	populateLater.Call(c)
-}
-
-var populateLater = delay.Func("populate", func(c appengine.Context) {
 	kanjidic := kanjidic2.ParseKanjiDic2("admin/kanjidic2/kanjidic2.xml")
 	for _, kanji := range kanjidic {
 		k := Kanji{
@@ -52,12 +48,16 @@ var populateLater = delay.Func("populate", func(c appengine.Context) {
 				k.Meanings = append(k.Meanings, m.Value)
 			}
 		}
-		key := datastore.NewKey(c, "Kanji", kanji.Literal, 0, nil)
-		_, err := datastore.Put(c, key, &k)
-		c.Infof("Added kanji %s", kanji.Literal)
-		if err != nil {
-			c.Errorf(err.Error())
-			return
-		}
+		populateLater.Call(c, k)
+	}
+}
+
+var populateLater = delay.Func("populate", func(c appengine.Context, k Kanji) {
+	key := datastore.NewKey(c, "Kanji", k.Literal, 0, nil)
+	_, err := datastore.Put(c, key, &k)
+	c.Infof("Added kanji %s", k.Literal)
+	if err != nil {
+		c.Errorf(err.Error())
+		return
 	}
 })
