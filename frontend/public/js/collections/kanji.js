@@ -32,16 +32,10 @@ function(_, Backbone, KanjiModel, QueryModel) {
     baseUrl: '/api/search/',
     url: '',
     model: KanjiModel,
-    query: null,
 
     initialize: function () {
-      _.bindAll(this,
-        'updateUrl');
+      _.bindAll(this, 'updateUrl');
     },
-
-    /**
-     * @public
-     */
 
     /**
      * Updates the fetch url based on the query state.
