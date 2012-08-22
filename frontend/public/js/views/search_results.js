@@ -64,7 +64,7 @@ function($, _, Backbone, tpl) {
      */
     onKanjiClick: function (e) {
       this.router.navigate(
-        '/kanji/' + e.target.innerText,
+        this.$(e.target).attr('href'),
         { trigger: true });
       e.preventDefault();
     }
