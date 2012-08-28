@@ -18,13 +18,6 @@ function(_, Backbone, KanjiModel, QueryModel) {
   var Kanji;
 
   /**
-   * @private
-   */
-  function myPrivate() {
-    // do private stuff
-  }
-
-  /**
    * @constructor
    */
   Kanji = Backbone.Collection.extend({

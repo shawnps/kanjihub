@@ -49,6 +49,9 @@ function($, _, Backbone, tpl) {
      * @returns {Backbone.View}
      */
     render: function () {
+      if (!this.model) {
+        return;
+      }
       this.$el.html(this.template({
         kanji: this.model.toJSON()
       }));

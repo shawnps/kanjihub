@@ -102,9 +102,15 @@ function($, _, Backbone, tpl, KanjiCollection, SearchBarView,
 
     onQueryChange: function () {
       this.kanjiResults.reset(null, {silent: true});
-      this.renderResults('Loading...');
-      this.kanjiResults.updateUrl(this.model);
-      this.kanjiResults.fetch();
+      if (this.model.get('readingType') === 'kanji') {
+        this.renderResults();
+        this.router.navigate('/kanji/' + this.model.get('searchTerm')[0],
+          { trigger: true });
+      } else {
+        this.renderResults('Loading...');
+        this.kanjiResults.updateUrl(this.model);
+        this.kanjiResults.fetch();
+      }
     }
 
   });

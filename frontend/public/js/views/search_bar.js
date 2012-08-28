@@ -64,6 +64,7 @@ function($, _, Backbone, QueryModel, tpl) {
     updateQuery: function () {
       var searchTerm = this.$('.search-query').val();
       this.query.setSearchTerm(searchTerm);
+      this.query.trigger('change');
     },
 
     // EVENT HANDLERS
