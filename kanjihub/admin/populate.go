@@ -1,18 +1,17 @@
-package admin
+package main
 
 import (
-	"admin/kanjidic2"
-	"appengine"
-	"appengine/datastore"
-	"appengine/delay"
-	"net/http"
+	"fmt"
+	"github.com/shawnps/kanjidic2"
+	"labix.org/v2/mgo"
+	"labix.org/v2/mgo/bson"
+	"sync"
 )
 
-func init() {
-	http.HandleFunc("/populate", populate)
-}
+const mongoDbUrl = "localhost"
 
 type Kanji struct {
+	Id          bson.ObjectId `bson:"_id"`
 	Literal     string
 	Grade       int
 	StrokeCount int
@@ -23,11 +22,17 @@ type Kanji struct {
 	Meanings    []string
 }
 
-func populate(w http.ResponseWriter, r *http.Request) {
-	c := appengine.NewContext(r)
-	kanjidic := kanjidic2.ParseKanjiDic2("admin/kanjidic2/kanjidic2.xml")
+func main() {
+	var wg sync.WaitGroup
+	kanjidic := kanjidic2.ParseKanjiDic2("kanjidic2/kanjidic2.xml")
+	session, err := mgo.Dial(mongoDbUrl)
+	if err != nil {
+		fmt.Println(err)
+	}
 	for _, kanji := range kanjidic {
+		wg.Add(1)
 		k := Kanji{
+			Id:          bson.NewObjectId(),
 			Literal:     kanji.Literal,
 			Grade:       kanji.Grade,
 			StrokeCount: kanji.StrokeCount,
@@ -48,16 +53,15 @@ func populate(w http.ResponseWriter, r *http.Request) {
 				k.Meanings = append(k.Meanings, m.Value)
 			}
 		}
-		populateLater.Call(c, k)
+		fmt.Println("inserting this kanji: ", k)
+		go func(s *mgo.Session, k Kanji) {
+			defer wg.Done()
+			c := s.DB("kanjihub").C("kanji")
+			err := c.Insert(k)
+			if err != nil {
+				fmt.Println(err)
+			}
+		}(session, k)
 	}
+	wg.Wait()
 }
-
-var populateLater = delay.Func("populate", func(c appengine.Context, k Kanji) {
-	key := datastore.NewKey(c, "Kanji", k.Literal, 0, nil)
-	_, err := datastore.Put(c, key, &k)
-	c.Infof("Added kanji %s", k.Literal)
-	if err != nil {
-		c.Errorf(err.Error())
-		return
-	}
-})
