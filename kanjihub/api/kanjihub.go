@@ -1,16 +1,16 @@
-package kanjihub
+package main
 
 import (
-	"appengine"
-	"appengine/datastore"
-	"appengine/memcache"
-	"code.google.com/p/gorilla/mux"
 	"encoding/json"
 	"fmt"
+	"github.com/gorilla/mux"
 	"io/ioutil"
+	"labix.org/v2/mgo"
+	"labix.org/v2/mgo/bson"
 	"net/http"
-	"strings"
 )
+
+const mongoDbUrl = "localhost"
 
 type Kanji struct {
 	Literal     string   `json:"literal"`
@@ -23,13 +23,14 @@ type Kanji struct {
 	Meanings    []string `json:"meanings"`
 }
 
-func init() {
+func main() {
 	r := mux.NewRouter()
 	r.HandleFunc("/", HomeHandler)
 	r.HandleFunc("/api/kanji/{literal}", KanjiDetailHandler)
-	r.HandleFunc("/api/search/{reading}/{term}", KanjiSearchHandler)
+	//r.HandleFunc("/api/search/{reading}/{term}", KanjiSearchHandler)
 	r.HandleFunc("/{path:.*}", HomeHandler)
 	http.Handle("/", r)
+	http.ListenAndServe(":8080", nil)
 }
 
 func HomeHandler(w http.ResponseWriter, r *http.Request) {
@@ -42,8 +43,8 @@ func HomeHandler(w http.ResponseWriter, r *http.Request) {
 	return
 }
 
+/*
 func KanjiSearchHandler(w http.ResponseWriter, r *http.Request) {
-	c := appengine.NewContext(r)
 	// parse query params out of url
 	vars := mux.Vars(r)
 	// TODO: change query based on reading
@@ -78,48 +79,28 @@ func KanjiSearchHandler(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 	fmt.Fprint(w, string(jsonResults))
 }
+*/
 
 func KanjiDetailHandler(w http.ResponseWriter, r *http.Request) {
-	c := appengine.NewContext(r)
 	vars := mux.Vars(r)
 	l := vars["literal"]
-	k := datastore.NewKey(c, "Kanji", l, 0, nil)
-	// Try to get kanji from memcache
-	item, err := memcache.Get(c, l)
-	if err != nil && err != memcache.ErrCacheMiss {
+	session, err := mgo.Dial(mongoDbUrl)
+	if err != nil {
+		fmt.Println(err)
+	}
+	c := session.DB("kanjihub").C("kanji")
+	kanji := new(Kanji)
+	err = c.Find(bson.M{"literal": l}).One(&kanji)
+	if err != nil {
 		http.Error(w, err.Error(), http.StatusNotFound)
 		return
 	}
-	// Got it from memcache
-	if err == nil {
-		c.Debugf("memcache hit for %s", l)
-		fmt.Fprint(w, string(item.Value))
+	b, err := json.Marshal(kanji)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusNotFound)
 		return
-	} else {
-		// Wasn't in memcache, have to get from datastore
-		kanji := new(Kanji)
-		err := datastore.Get(c, k, kanji)
-		if err != nil {
-			http.Error(w, err.Error(), http.StatusNotFound)
-			return
-		}
-		b, err := json.Marshal(kanji)
-		if err != nil {
-			http.Error(w, err.Error(), http.StatusNotFound)
-			return
-		}
-		// Set it in memcache with the literal as the key, and the
-		// []byte representation of the JSON as the value
-		item := &memcache.Item{
-			Key:   l,
-			Value: b,
-		}
-		err = memcache.Set(c, item)
-		if err != nil {
-			http.Error(w, err.Error(), http.StatusNotFound)
-			return
-		}
-		w.Header().Set("Content-Type", "application/json; charset=utf-8")
-		fmt.Fprint(w, string(b))
 	}
+
+	w.Header().Set("Content-Type", "application/json; charset=utf-8")
+	fmt.Fprint(w, string(b))
 }
